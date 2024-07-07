@@ -106,10 +106,8 @@ resource "aws_ecs_task_definition" "allianceauth" {
           value = var.AA_EMAIL_HOST
         }
       ]
-      entryPoint: [
-        "gunicorn"
-      ]
       command = [
+            "gunicorn",
 			"myauth.wsgi",
 			"--bind=0.0.0.0:8000",
 			"--workers=3",
