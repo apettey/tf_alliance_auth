@@ -108,7 +108,7 @@ resource "aws_ecs_task_definition" "allianceauth" {
         }
       ]
       command = [
-      "/usr/local/bin/gunicorn myauth.wsgi:application --workers=3 --timeout 120 --max-requests=500 --max-requests-jitter=50"
+      "/usr/local/bin/gunicorn myauth.wsgi:application --workers=3 --timeout=120 --max-requests=500 --max-requests-jitter=50"
       ]
       logConfiguration = {
         logDriver = "awslogs"
