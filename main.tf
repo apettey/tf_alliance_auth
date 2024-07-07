@@ -107,6 +107,7 @@ resource "aws_ecs_task_definition" "allianceauth" {
           value = var.AA_EMAIL_HOST
         }
       ]
+      workingDirectory = "/home/allianceauth/myauth"
       command = [
             "gunicorn",
 			"--bind=0.0.0.0:8000",
