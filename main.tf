@@ -264,8 +264,8 @@ resource "aws_ecs_service" "allianceauth" {
   desired_count   = 1
   launch_type     = "EC2"
 
-  network_configuration {
-    subnets         = var.SUBNET_IDS
-    security_groups = var.SECURITY_GROUPS
-  }
+#   network_configuration {
+#     subnets         = var.SUBNET_IDS
+#     security_groups = var.SECURITY_GROUPS
+#   }
 }
