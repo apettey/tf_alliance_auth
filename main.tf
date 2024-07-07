@@ -64,6 +64,7 @@ resource "aws_ecs_task_definition" "allianceauth" {
     {
       name  = "allianceauth"
       image = var.AA_DOCKER_IMAGE
+      workingDirectory = "/home/allianceauth/myauth"
       environment = [
         {
           name  = "DOMAIN"
@@ -108,7 +109,6 @@ resource "aws_ecs_task_definition" "allianceauth" {
       ]
       command = [
             "gunicorn",
-			"myauth.wsgi",
 			"--bind=0.0.0.0:8000",
 			"--workers=3",
 			"--timeout=120",
