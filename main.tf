@@ -58,12 +58,12 @@ resource "aws_ecs_task_definition" "allianceauth" {
   requires_compatibilities = ["EC2"]
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
-  memory = 150
-
+  memory                   = 150
+  network_mode             = "awsvpc"
   container_definitions = jsonencode([
     {
-      name  = "allianceauth"
-      image = var.AA_DOCKER_IMAGE
+      name             = "allianceauth"
+      image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
       environment = [
         {
@@ -109,12 +109,12 @@ resource "aws_ecs_task_definition" "allianceauth" {
       ]
       workingDirectory = "/home/allianceauth/myauth"
       command = [
-            "gunicorn",
-			"--bind=0.0.0.0:8000",
-			"--workers=3",
-			"--timeout=120",
-			"--max-requests=500",
-			"--max-requests-jitter=50"
+        "gunicorn",
+        "--bind=0.0.0.0:8000",
+        "--workers=3",
+        "--timeout=120",
+        "--max-requests=500",
+        "--max-requests-jitter=50"
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -126,8 +126,8 @@ resource "aws_ecs_task_definition" "allianceauth" {
       }
     },
     {
-      name  = "allianceauth_worker_beat"
-      image = var.AA_DOCKER_IMAGE
+      name             = "allianceauth_worker_beat"
+      image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
       environment = [
         {
@@ -175,11 +175,11 @@ resource "aws_ecs_task_definition" "allianceauth" {
           value = var.AA_EMAIL_HOST
         }
       ]
-      entryPoint: [
+      entryPoint : [
         "sh", "-c"
       ]
       command = [
-      "celery -A myauth beat"
+        "celery -A myauth beat"
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -191,8 +191,8 @@ resource "aws_ecs_task_definition" "allianceauth" {
       }
     },
     {
-      name  = "allianceauth_worker"
-      image = var.AA_DOCKER_IMAGE
+      name             = "allianceauth_worker"
+      image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
       environment = [
         {
@@ -240,7 +240,7 @@ resource "aws_ecs_task_definition" "allianceauth" {
           value = var.AA_EMAIL_HOST
         }
       ]
-      entryPoint: [
+      entryPoint : [
         "sh", "-c"
       ]
       command = [
