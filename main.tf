@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "allianceauth" {
   requires_compatibilities = ["EC2"]
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
-  memory = 250
+  memory = 150
 
   container_definitions = jsonencode([
     {
