@@ -53,7 +53,7 @@ resource "aws_iam_role" "allianceauth_ecs_task_role" {
 }
 
 
-resource "aws_ecs_task_definition" "allianceauth" {
+resource "aws_ecs_task_definition" "allianceauthtask" {
   family                   = "allianceauthtask"
   requires_compatibilities = ["EC2"]
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
@@ -272,7 +272,7 @@ resource "aws_ecs_task_definition" "allianceauth" {
 resource "aws_ecs_service" "allianceauth" {
   name            = "allianceauth"
   cluster         = var.ESC_CLUSTER_ID
-  task_definition = aws_ecs_task_definition.allianceauth.arn
+  task_definition = aws_ecs_task_definition.allianceauthtask.arn
   desired_count   = 1
   launch_type     = "EC2"
 
