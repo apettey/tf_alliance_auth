@@ -59,11 +59,12 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
   memory                   = 150
+  network_mode             = "awsvpc"
   container_definitions = jsonencode([
     {
       name             = "allianceauth"
       image            = var.AA_DOCKER_IMAGE
-      workingDirectory = "/home/allianceauth/myauth"
+      workingDirectory = "/home/allianceauth"
       environment = [
         {
           name  = "DOMAIN"
@@ -102,13 +103,17 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
           value = var.AA_DB_USER
         },
         {
+          name  = "AA_DB_PASSWORD"
+          value = var.AA_DB_PASSWORD
+        },
+        {
           name  = "AA_EMAIL_HOST"
           value = var.AA_EMAIL_HOST
         }
       ]
       workingDirectory = "/home/allianceauth/myauth"
       command = [
-        "gunicorn",
+        "gunicorn myauth.wsgi:application",
         "--bind=0.0.0.0:8000",
         "--workers=3",
         "--timeout=120",
@@ -128,12 +133,6 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
       name             = "allianceauth_worker_beat"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
-      dependsOn = [
-        {
-          "containerName" : "allianceauth",
-          "condition" : "healthy"
-        }
-      ]
       environment = [
         {
           name  = "DOMAIN"
@@ -199,12 +198,6 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
       name             = "allianceauth_worker"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
-      dependsOn = [
-        {
-          "containerName" : "allianceauth",
-          "condition" : "healthy"
-        }
-      ]
       environment = [
         {
           name  = "DOMAIN"
@@ -275,5 +268,10 @@ resource "aws_ecs_service" "allianceauth" {
   task_definition = aws_ecs_task_definition.allianceauthtask.arn
   desired_count   = 1
   launch_type     = "EC2"
+
+  network_configuration {
+    subnets         = var.SUBNET_IDS
+    security_groups = var.SECURITY_GROUPS
+  }
 
 }
