@@ -64,7 +64,6 @@ resource "aws_ecs_task_definition" "allianceauth" {
     {
       name  = "allianceauth"
       image = var.AA_DOCKER_IMAGE
-      workingDirectory = "/home/allianceauth/myauth"
       environment = [
         {
           name  = "DOMAIN"
