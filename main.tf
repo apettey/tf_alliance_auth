@@ -128,6 +128,12 @@ resource "aws_ecs_task_definition" "allianceauth" {
       name             = "allianceauth_worker_beat"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
+      dependsOn = [
+        {
+          "containerName" : "allianceauth",
+          "condition" : "healthy"
+        }
+      ]
       environment = [
         {
           name  = "DOMAIN"
@@ -193,6 +199,12 @@ resource "aws_ecs_task_definition" "allianceauth" {
       name             = "allianceauth_worker"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
+      dependsOn = [
+        {
+          "containerName" : "allianceauth",
+          "condition" : "healthy"
+        }
+      ]
       environment = [
         {
           name  = "DOMAIN"
@@ -264,8 +276,4 @@ resource "aws_ecs_service" "allianceauth" {
   desired_count   = 1
   launch_type     = "EC2"
 
-  network_configuration {
-    subnets         = var.SUBNET_IDS
-    security_groups = var.SECURITY_GROUPS
-  }
 }
