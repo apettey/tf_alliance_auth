@@ -147,7 +147,7 @@ variable "AWS_REGION" {
   description = "The AWS region for the Alliance Auth instance"
   type        = string
   default     = "eu-west-1"
-  
+
 }
 
 variable "SECURITY_GROUPS" {
@@ -156,11 +156,11 @@ variable "SECURITY_GROUPS" {
 }
 
 variable "SUBNET_IDS" {
-    description = "The subnets for the Alliance Auth instance"
-    type        = list(string)
+  description = "The subnets for the Alliance Auth instance"
+  type        = list(string)
 }
 
 variable "ESC_CLUSTER_ID" {
   description = "value of the ECS cluster ID"
-    type        = string
+  type        = string
 }
