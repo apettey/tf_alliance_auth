@@ -106,8 +106,16 @@ resource "aws_ecs_task_definition" "allianceauth" {
           value = var.AA_EMAIL_HOST
         }
       ]
+      entryPoint: [
+        "gunicorn"
+      ]
       command = [
-      "/usr/local/bin/gunicorn myauth.wsgi:application --workers=3 --timeout=120 --max-requests=500 --max-requests-jitter=50"
+			"myauth.wsgi",
+			"--bind=0.0.0.0:8000",
+			"--workers=3",
+			"--timeout=120",
+			"--max-requests=500",
+			"--max-requests-jitter=50"
       ]
       logConfiguration = {
         logDriver = "awslogs"
