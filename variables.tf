@@ -1,7 +1,7 @@
 variable "PROTOCOL" {
   description = "The protocol for the Alliance Auth instance"
   type        = string
-  default     = "http"
+  default     = "http://"
 }
 
 variable "DOMAIN" {
