@@ -164,3 +164,8 @@ variable "ESC_CLUSTER_ID" {
   description = "value of the ECS cluster ID"
   type        = string
 }
+
+variable "VPC_ID" {
+  description = "VPC ID to be used for the load balancer"
+  type        = string
+}

@@ -58,9 +58,72 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
   requires_compatibilities = ["EC2"]
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
-  memory                   = 150
-  network_mode             = "awsvpc"
+  memory                   = 450
+
   container_definitions = jsonencode([
+    {
+      name             = "allianceauth_migration"
+      image            = var.AA_DOCKER_IMAGE
+      essential        = false
+      workingDirectory = "/home/allianceauth"
+      environment = [
+        {
+          name  = "DOMAIN"
+          value = var.DOMAIN
+        },
+        {
+          name  = "AUTH_SUBDOMAIN"
+          value = var.AUTH_SUBDOMAIN
+        },
+        {
+          name  = "AA_DOCKER_IMAGE"
+          value = var.AA_DOCKER_IMAGE
+        },
+        {
+          name  = "AA_REDIS"
+          value = var.AA_REDIS
+        },
+        {
+          name  = "AA_SITENAME"
+          value = var.AA_SITENAME
+        },
+        {
+          name  = "AA_SECRET_KEY"
+          value = var.AA_SECRET_KEY
+        },
+        {
+          name  = "AA_DB_HOST"
+          value = var.AA_DB_HOST
+        },
+        {
+          name  = "AA_DB_NAME"
+          value = var.AA_DB_NAME
+        },
+        {
+          name  = "AA_DB_USER"
+          value = var.AA_DB_USER
+        },
+        {
+          name  = "AA_DB_PASSWORD"
+          value = var.AA_DB_PASSWORD
+        },
+        {
+          name  = "AA_EMAIL_HOST"
+          value = var.AA_EMAIL_HOST
+        }
+      ]
+      command = [
+        "auth migrate",
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = var.CLOUDWATCH_LOG_GROUP
+          "awslogs-region"        = var.AWS_REGION
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
+    },
     {
       name             = "allianceauth"
       image            = var.AA_DOCKER_IMAGE
@@ -111,6 +174,15 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
           value = var.AA_EMAIL_HOST
         }
       ]
+
+      portMappings = [
+        {
+          containerPort = 8000
+          hostPort      = 8000
+          protocol      = "tcp"
+        }
+      ]
+
       workingDirectory = "/home/allianceauth/myauth"
       command = [
         "gunicorn myauth.wsgi:application",
@@ -133,6 +205,7 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
       name             = "allianceauth_worker_beat"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
+      essential        = false
       environment = [
         {
           name  = "DOMAIN"
@@ -198,6 +271,7 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
       name             = "allianceauth_worker"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
+      essential        = false
       environment = [
         {
           name  = "DOMAIN"
@@ -260,6 +334,9 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
       }
     }
   ])
+  depends_on = [
+    aws_lb_listener.ecs_lb_listener
+  ]
 }
 
 resource "aws_ecs_service" "allianceauth" {
@@ -269,9 +346,14 @@ resource "aws_ecs_service" "allianceauth" {
   desired_count   = 1
   launch_type     = "EC2"
 
-  network_configuration {
-    subnets         = var.SUBNET_IDS
-    security_groups = var.SECURITY_GROUPS
-  }
+  # network_configuration {
+  #   subnets         = var.SUBNET_IDS
+  #   security_groups = var.SECURITY_GROUPS
+  # }
 
+  load_balancer {
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    container_name   = "allianceauth"
+    container_port   = 8000
+  }
 }
