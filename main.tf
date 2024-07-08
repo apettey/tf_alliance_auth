@@ -179,7 +179,7 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
         {
           containerPort = 8000
           hostPort      = 8000
-          protocol      = "tcp"
+          protocol      = "http"
         }
       ]
 
