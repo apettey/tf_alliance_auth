@@ -59,6 +59,7 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
   memory                   = 450
+  cpu                      = 1024
 
   container_definitions = jsonencode([
     {
