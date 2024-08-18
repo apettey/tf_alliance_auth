@@ -114,7 +114,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
         }
       ]
       command = [
-        "auth migrate",
+        "python /home/allianceauth/myauth/manage.py migrate",
       ]
       logConfiguration = {
         logDriver = "awslogs"
