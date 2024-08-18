@@ -366,11 +366,6 @@ resource "aws_ecs_service" "allianceauth_web" {
   desired_count   = 1
   launch_type     = "EC2"
 
-  network_configuration {
-    subnets         = var.SUBNET_IDS
-    security_groups = var.SECURITY_GROUPS
-  }
-
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
     container_name   = "allianceauth"
@@ -386,8 +381,4 @@ resource "aws_ecs_service" "allianceauth_workers" {
   desired_count   = 1
   launch_type     = "EC2"
 
-  network_configuration {
-    subnets         = var.SUBNET_IDS
-    security_groups = var.SECURITY_GROUPS
-  }
 }
