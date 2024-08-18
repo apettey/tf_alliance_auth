@@ -72,9 +72,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
       workingDirectory = "/home/allianceauth"
       environment      = local.container_environment
       command = [
-        "python",
-        "/home/allianceauth/myauth/manage.py",
-        "migrate",
+        "python /home/allianceauth/myauth/manage.py migrate",
       ]
       logConfiguration = {
         logDriver = "awslogs"
