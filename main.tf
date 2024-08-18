@@ -210,7 +210,7 @@ resource "aws_ecs_service" "allianceauth_web" {
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
     container_name   = "allianceauth"
-    container_port   = 8000
+    container_port   = 4080
   }
 }
 

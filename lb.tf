@@ -1,6 +1,6 @@
 resource "aws_lb_target_group" "ecs_tg" {
   name     = "aa-target-group"
-  port     = 8000
+  port     = 4080
   protocol = "HTTP"
   vpc_id   = var.VPC_ID
 
