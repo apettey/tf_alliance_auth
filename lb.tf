@@ -4,14 +4,14 @@ resource "aws_lb_target_group" "ecs_tg" {
   protocol = "HTTP"
   vpc_id   = var.VPC_ID
 
-#   health_check {
-#     interval            = 30
-#     path                = "/"
-#     timeout             = 5
-#     healthy_threshold   = 1
-#     unhealthy_threshold = 1
-#     matcher             = "200-299"
-#   }
+  #   health_check {
+  #     interval            = 30
+  #     path                = "/"
+  #     timeout             = 5
+  #     healthy_threshold   = 1
+  #     unhealthy_threshold = 1
+  #     matcher             = "200-299"
+  #   }
 
   tags = {
     Name = "ecs-target-group"
