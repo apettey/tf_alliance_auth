@@ -88,6 +88,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
       image            = var.AA_DOCKER_IMAGE
       essential        = false
       workingDirectory = "/home/allianceauth"
+      environment      = local.container_environment
       command = "python /home/allianceauth/myauth/manage.py check",
       
       logConfiguration = {
