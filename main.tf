@@ -82,15 +82,15 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
           "awslogs-stream-prefix" = "ecs"
         }
       }
-      }, 
+    },
     {
       name             = "allianceauth_check"
       image            = var.AA_DOCKER_IMAGE
       essential        = false
       workingDirectory = "/home/allianceauth"
       environment      = local.container_environment
-      command = "python /home/allianceauth/myauth/manage.py check",
-      
+      command          = ["python /home/allianceauth/myauth/manage.py check"]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -100,7 +100,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
         }
       }
     },
-    
+
     {
       name             = "allianceauth"
       image            = var.AA_DOCKER_IMAGE
