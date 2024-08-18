@@ -53,8 +53,8 @@ resource "aws_iam_role" "allianceauth_ecs_task_role" {
 }
 
 
-resource "aws_ecs_task_definition" "allianceauthtask" {
-  family                   = "allianceauthtask"
+resource "aws_ecs_task_definition" "allianceauth_web" {
+  family                   = "allianceauth_web"
   requires_compatibilities = ["EC2"]
   execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
@@ -201,12 +201,30 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
           "awslogs-stream-prefix" = "ecs"
         }
       }
-    },
+    }
+  ])
+  depends_on = [
+    aws_lb_listener.ecs_lb_listener
+  ]
+}
+
+
+
+
+resource "aws_ecs_task_definition" "allianceauth_workers" {
+  family                   = "allianceauth_workers"
+  requires_compatibilities = ["EC2"]
+  execution_role_arn       = aws_iam_role.allianceauth_ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.allianceauth_ecs_task_role.arn
+  memory                   = 256
+  cpu                      = 512
+
+  container_definitions = jsonencode([
     {
       name             = "allianceauth_worker_beat"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
-      essential        = false
+      essential        = true
       environment = [
         {
           name  = "DOMAIN"
@@ -272,7 +290,7 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
       name             = "allianceauth_worker"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
-      essential        = false
+      essential        = true
       environment = [
         {
           name  = "DOMAIN"
@@ -340,21 +358,36 @@ resource "aws_ecs_task_definition" "allianceauthtask" {
   ]
 }
 
-resource "aws_ecs_service" "allianceauth" {
-  name            = "allianceauth"
+
+resource "aws_ecs_service" "allianceauth_web" {
+  name            = "allianceauth_web"
   cluster         = var.ESC_CLUSTER_ID
-  task_definition = aws_ecs_task_definition.allianceauthtask.arn
+  task_definition = aws_ecs_task_definition.allianceauth_web.arn
   desired_count   = 1
   launch_type     = "EC2"
 
-  # network_configuration {
-  #   subnets         = var.SUBNET_IDS
-  #   security_groups = var.SECURITY_GROUPS
-  # }
+  network_configuration {
+    subnets         = var.SUBNET_IDS
+    security_groups = var.SECURITY_GROUPS
+  }
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
     container_name   = "allianceauth"
     container_port   = 8000
+  }
+}
+
+
+resource "aws_ecs_service" "allianceauth_workers" {
+  name            = "allianceauth_workers"
+  cluster         = var.ESC_CLUSTER_ID
+  task_definition = aws_ecs_task_definition.allianceauth_workers.arn
+  desired_count   = 1
+  launch_type     = "EC2"
+
+  network_configuration {
+    subnets         = var.SUBNET_IDS
+    security_groups = var.SECURITY_GROUPS
   }
 }
