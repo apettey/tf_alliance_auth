@@ -1,5 +1,5 @@
 locals {
-  CONTAINER_ENVIRONMENT = [
+  container_environment = [
     {
       name  = "DOMAIN"
       value = var.DOMAIN

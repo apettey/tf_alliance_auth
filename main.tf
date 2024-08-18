@@ -70,7 +70,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
       image            = var.AA_DOCKER_IMAGE
       essential        = false
       workingDirectory = "/home/allianceauth"
-      environment      = locals.CONTAINER_ENVIRONMENT
+      environment      = local.container_environment
       command = [
         "python",
         "/home/allianceauth/myauth/manage.py",
@@ -107,7 +107,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
       name             = "allianceauth"
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth"
-      environment      = locals.CONTAINER_ENVIRONMENT
+      environment      = local.container_environment
 
       portMappings = [
         {
@@ -158,7 +158,7 @@ resource "aws_ecs_task_definition" "allianceauth_workers" {
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
       essential        = true
-      environment      = locals.CONTAINER_ENVIRONMENT
+      environment      = local.container_environment
       entryPoint : [
         "sh", "-c"
       ]
@@ -179,7 +179,7 @@ resource "aws_ecs_task_definition" "allianceauth_workers" {
       image            = var.AA_DOCKER_IMAGE
       workingDirectory = "/home/allianceauth/myauth"
       essential        = true
-      environment      = locals.CONTAINER_ENVIRONMENT
+      environment      = local.container_environment
       entryPoint : [
         "sh", "-c"
       ]
