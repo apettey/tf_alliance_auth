@@ -109,8 +109,8 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
 
       portMappings = [
         {
-          containerPort = 8000
-          hostPort      = 8000
+          containerPort = 4080
+          hostPort      = 4080
           protocol      = "http"
         }
       ]
@@ -118,7 +118,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
       workingDirectory = "/home/allianceauth/myauth"
       command = [
         "gunicorn myauth.wsgi:application",
-        "--bind=0.0.0.0:8000",
+        "--bind=0.0.0.0:4080",
         "--workers=3",
         "--timeout=120",
         "--max-requests=500",
