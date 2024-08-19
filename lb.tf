@@ -3,6 +3,12 @@ resource "aws_lb_target_group" "ecs_tg" {
   port     = 4080
   protocol = "HTTP"
   vpc_id   = var.VPC_ID
+  health_check {
+    path                = "/account/login/?next=/"
+    port                = 4080
+    protocol            = "HTTP"
+    unhealthy_threshold = 5
+  }
 
   #   health_check {
   #     interval            = 30
