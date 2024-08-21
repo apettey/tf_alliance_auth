@@ -51,6 +51,15 @@ locals {
     {
       name  = "AA_REDIS"
       value = var.AA_REDIS
-    }
+    },
+    {
+      name  = "ESI_SSO_CLIENT_ID"
+      value = var.ESI_SSO_CLIENT_ID
+    },
+    {
+      name  = "ESI_SSO_CLIENT_SECRET"
+      value = var.ESI_SSO_CLIENT_SECRET
+    },
+
   ]
 }
