@@ -1,6 +1,10 @@
 locals {
   container_environment = [
     {
+      name  = "PROTOCOL"
+      value = var.PROTOCOL
+    },
+    {
       name  = "DOMAIN"
       value = var.DOMAIN
     },
