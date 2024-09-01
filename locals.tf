@@ -60,6 +60,13 @@ locals {
       name  = "ESI_SSO_CLIENT_SECRET"
       value = var.ESI_SSO_CLIENT_SECRET
     },
-
+    {
+      name  = "AA_EMAIL_HOST_USER"
+      value = var.AA_EMAIL_HOST_USER
+    },
+    {
+      name  = "AA_EMAIL_HOST_PASSWORD"
+      value = var.AA_EMAIL_HOST_PASSWORD
+    }
   ]
 }
