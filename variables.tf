@@ -77,14 +77,14 @@ variable "AA_EMAIL_PORT" {
 variable "AA_EMAIL_HOST_USER" {
   description = "The email host user for the Django application"
   type        = string
-  default     = ""
+  default     = "admin@pettey.me"
 }
 
 variable "AA_EMAIL_HOST_PASSWORD" {
   description = "The email host password for the Django application"
   type        = string
   sensitive   = true
-  default     = ""
+  default     = "password"
 }
 
 variable "AA_EMAIL_USE_TLS" {
