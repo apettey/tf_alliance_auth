@@ -117,7 +117,7 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
 
       workingDirectory = "/home/allianceauth/myauth"
       command = [
-        "gunicorn myauth.wsgi:application --bind=0.0.0.0:4080 --workers=3 --timeout=120 --max-requests=500 --max-requests-jitter=50"
+        "service nginx start && gunicorn myauth.wsgi:application --bind=0.0.0.0:4080 --workers=3 --timeout=120 --max-requests=500 --max-requests-jitter=50"
       ]
       logConfiguration = {
         logDriver = "awslogs"
