@@ -109,8 +109,8 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
 
       portMappings = [
         {
-          containerPort = 4080
-          hostPort      = 4080
+          containerPort = 8080
+          hostPort      = 8080
           protocol      = "http"
         }
       ]
@@ -205,7 +205,7 @@ resource "aws_ecs_service" "allianceauth_web" {
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_tg.arn
     container_name   = "allianceauth"
-    container_port   = 4080
+    container_port   = 8080
   }
 }
 
