@@ -1,3 +1,3 @@
-output "public_dns_name" {
-  value = aws_lb.ecs_lb.dns_name 
+output "public_dns_address" {
+  value = aws_lb.ecs_lb.dns_name
 }

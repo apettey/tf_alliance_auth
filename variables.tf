@@ -169,3 +169,14 @@ variable "VPC_ID" {
   description = "VPC ID to be used for the load balancer"
   type        = string
 }
+
+variable "alliance_auth_domain" {
+  description = "The domain for alliance auth"
+  type        = string
+  default     = "auth.eveonline.toodle.io"
+}
+
+variable "zone_id" {
+  description = "The route53 zone to use for dns"
+  type = string
+}
