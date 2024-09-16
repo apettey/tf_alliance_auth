@@ -67,6 +67,14 @@ locals {
     {
       name  = "AA_EMAIL_HOST_PASSWORD"
       value = var.AA_EMAIL_HOST_PASSWORD
-    }
+    },
+    {
+      name  = "DJANGO_SUPERUSER_USERNAME"
+      value = "admin"
+    },
+    {
+      name  = "DJANGO_SUPERUSER_PASSWORD"
+      value = "Andrew001"
+    },
   ]
 }
