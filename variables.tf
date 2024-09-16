@@ -173,7 +173,6 @@ variable "VPC_ID" {
 variable "alliance_auth_domain" {
   description = "The domain for alliance auth"
   type        = string
-  default     = "auth.eveonline.toodle.io"
 }
 
 variable "zone_id" {
