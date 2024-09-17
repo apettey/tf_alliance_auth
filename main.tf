@@ -133,14 +133,6 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
       essential        = false
       environment      = local.container_environment
 
-      portMappings = [
-        {
-          containerPort = 8080
-          hostPort      = 8080
-          protocol      = "http"
-        }
-      ]
-
       workingDirectory = "/home/allianceauth/myauth"
       command = [
         "python manage.py createsuperuser --email=admin@pettey.me --noinput"
