@@ -126,6 +126,33 @@ resource "aws_ecs_task_definition" "allianceauth_web" {
           "awslogs-stream-prefix" = "ecs"
         }
       }
+    },
+    {
+      name             = "allianceauth_create_superuser"
+      image            = var.AA_DOCKER_IMAGE
+      essential        = false
+      environment      = local.container_environment
+
+      portMappings = [
+        {
+          containerPort = 8080
+          hostPort      = 8080
+          protocol      = "http"
+        }
+      ]
+
+      workingDirectory = "/home/allianceauth/myauth"
+      command = [
+        "python manage.py createsuperuser --email=admin@pettey.me --noinput"
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = var.CLOUDWATCH_LOG_GROUP
+          "awslogs-region"        = var.AWS_REGION
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
   depends_on = [
